@@ -1,0 +1,8 @@
+{
+  "name": "Remix Alumni Connect Portal",
+  "description": "A college alumni engagement platform converting convocation graduation verification into trusted alumni networking, mentorship, jobs, and events.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
