@@ -618,7 +618,7 @@ class MongoManager {
   public async syncUser(user: any) {
     if (!this.isConnected) return;
     try {
-      await MongoUser.findOneAndUpdate({ id: user.id }, user, { upsert: true, new: true });
+      await MongoUser.findOneAndUpdate({ id: user.id }, user, { upsert: true, returnDocument: 'after' });
     } catch (e: any) {
       console.warn('[MongoDB Sync] User write warning:', e.message);
     }
@@ -627,7 +627,7 @@ class MongoManager {
   public async syncStudent(student: any) {
     if (!this.isConnected) return;
     try {
-      await MongoStudent.findOneAndUpdate({ id: student.id }, student, { upsert: true, new: true });
+      await MongoStudent.findOneAndUpdate({ id: student.id }, student, { upsert: true, returnDocument: 'after' });
     } catch (e: any) {
       console.warn('[MongoDB Sync] Student write warning:', e.message);
     }
@@ -636,7 +636,7 @@ class MongoManager {
   public async syncAlumni(alumni: any) {
     if (!this.isConnected) return;
     try {
-      await MongoAlumni.findOneAndUpdate({ id: alumni.id }, alumni, { upsert: true, new: true });
+      await MongoAlumni.findOneAndUpdate({ id: alumni.id }, alumni, { upsert: true, returnDocument: 'after' });
     } catch (e: any) {
       console.warn('[MongoDB Sync] Alumni write warning:', e.message);
     }
@@ -645,7 +645,7 @@ class MongoManager {
   public async syncJob(job: any) {
     if (!this.isConnected) return;
     try {
-      await MongoJob.findOneAndUpdate({ id: job.id }, job, { upsert: true, new: true });
+      await MongoJob.findOneAndUpdate({ id: job.id }, job, { upsert: true, returnDocument: 'after' });
     } catch (e: any) {
       console.warn('[MongoDB Sync] Job write warning:', e.message);
     }
@@ -663,7 +663,7 @@ class MongoManager {
   public async syncEvent(event: any) {
     if (!this.isConnected) return;
     try {
-      await MongoEvent.findOneAndUpdate({ id: event.id }, event, { upsert: true, new: true });
+      await MongoEvent.findOneAndUpdate({ id: event.id }, event, { upsert: true, returnDocument: 'after' });
     } catch (e: any) {
       console.warn('[MongoDB Sync] Event write warning:', e.message);
     }
@@ -672,7 +672,7 @@ class MongoManager {
   public async syncAchievement(achievement: any) {
     if (!this.isConnected) return;
     try {
-      await MongoAchievement.findOneAndUpdate({ id: achievement.id }, achievement, { upsert: true, new: true });
+      await MongoAchievement.findOneAndUpdate({ id: achievement.id }, achievement, { upsert: true, returnDocument: 'after' });
     } catch (e: any) {
       console.warn('[MongoDB Sync] Achievement write warning:', e.message);
     }
@@ -681,7 +681,7 @@ class MongoManager {
   public async syncProfileChange(change: any) {
     if (!this.isConnected) return;
     try {
-      await MongoProfileChange.findOneAndUpdate({ id: change.id }, change, { upsert: true, new: true });
+      await MongoProfileChange.findOneAndUpdate({ id: change.id }, change, { upsert: true, returnDocument: 'after' });
     } catch (e: any) {
       console.warn('[MongoDB Sync] Profile change write warning:', e.message);
     }
@@ -690,7 +690,7 @@ class MongoManager {
   public async syncConnection(conn: any) {
     if (!this.isConnected) return;
     try {
-      await MongoConnection.findOneAndUpdate({ id: conn.id }, conn, { upsert: true, new: true });
+      await MongoConnection.findOneAndUpdate({ id: conn.id }, conn, { upsert: true, returnDocument: 'after' });
     } catch (e: any) {
       console.warn('[MongoDB Sync] Connection write warning:', e.message);
     }
@@ -699,7 +699,7 @@ class MongoManager {
   public async syncMentorship(mentorReq: any) {
     if (!this.isConnected) return;
     try {
-      await MongoMentorship.findOneAndUpdate({ id: mentorReq.id }, mentorReq, { upsert: true, new: true });
+      await MongoMentorship.findOneAndUpdate({ id: mentorReq.id }, mentorReq, { upsert: true, returnDocument: 'after' });
     } catch (e: any) {
       console.warn('[MongoDB Sync] Mentorship write warning:', e.message);
     }
@@ -708,7 +708,7 @@ class MongoManager {
   public async syncNotification(notif: any) {
     if (!this.isConnected) return;
     try {
-      await MongoNotification.findOneAndUpdate({ id: notif.id }, notif, { upsert: true, new: true });
+      await MongoNotification.findOneAndUpdate({ id: notif.id }, notif, { upsert: true, returnDocument: 'after' });
     } catch (e: any) {
       console.warn('[MongoDB Sync] Notification write warning:', e.message);
     }

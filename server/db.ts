@@ -473,11 +473,13 @@ class RelationalDatabase {
     student.graduationStatus = status;
     mongoManager.syncStudent(student);
 
-    pgDb
-      .update(schema.students)
-      .set({ graduationStatus: status })
-      .where(eq(schema.students.id, studentId))
-      .catch((err) => console.error('[PostgreSQL] Failed to update student status:', err));
+    if (process.env.DATABASE_URL || process.env.SQL_HOST) {
+      pgDb
+        .update(schema.students)
+        .set({ graduationStatus: status })
+        .where(eq(schema.students.id, studentId))
+        .catch((err) => console.error('[PostgreSQL] Failed to update student status:', err));
+    }
 
     return student;
   }
@@ -571,54 +573,56 @@ class RelationalDatabase {
     mongoManager.syncAlumni(newAlumni);
     mongoManager.syncStudent(student);
 
-    // Asynchronously persist to PostgreSQL
-    pgDb
-      .insert(schema.alumni)
-      .values({
-        id: newAlumni.id,
-        userId: newAlumni.userId,
-        studentId: newAlumni.studentId,
-        enrollmentNo: newAlumni.enrollmentNo,
-        name: newAlumni.name,
-        branch: newAlumni.branch,
-        degree: newAlumni.degree,
-        graduationYear: newAlumni.graduationYear,
-        collegeEmail: newAlumni.collegeEmail,
-        personalEmail: newAlumni.personalEmail,
-        phone: newAlumni.phone,
-        avatarUrl: newAlumni.avatarUrl,
-        currentCompany: newAlumni.currentCompany,
-        jobRole: newAlumni.jobRole,
-        industry: newAlumni.industry,
-        experienceYears: newAlumni.experienceYears,
-        city: newAlumni.city,
-        country: newAlumni.country,
-        higherStudies: newAlumni.higherStudies,
-        skills: newAlumni.skills,
-        bio: newAlumni.bio,
-        linkedinUrl: newAlumni.linkedinUrl,
-        githubUrl: newAlumni.githubUrl,
-        websiteUrl: newAlumni.websiteUrl,
-        isAvailableForMentorship: newAlumni.isAvailableForMentorship,
-        mentorshipAreas: newAlumni.mentorshipAreas,
-        maxMentees: newAlumni.maxMentees,
-        verificationStatus: newAlumni.verificationStatus,
-        verifiedAt: new Date(),
-        verifiedBy: newAlumni.verifiedBy,
-      })
-      .then(() => {
-        return pgDb
-          .update(schema.students)
-          .set({ isAlumniActivated: true, alumniId: newAlumniId })
-          .where(eq(schema.students.id, student.id));
-      })
-      .then(() => {
-        return pgDb
-          .update(schema.users)
-          .set({ role: 'ALUMNI', alumniId: newAlumniId })
-          .where(eq(schema.users.id, params.userId));
-      })
-      .catch((err) => console.error('[PostgreSQL] Failed to persist alumni activation:', err));
+    // Asynchronously persist to PostgreSQL (if configured)
+    if (process.env.DATABASE_URL || process.env.SQL_HOST) {
+      pgDb
+        .insert(schema.alumni)
+        .values({
+          id: newAlumni.id,
+          userId: newAlumni.userId,
+          studentId: newAlumni.studentId,
+          enrollmentNo: newAlumni.enrollmentNo,
+          name: newAlumni.name,
+          branch: newAlumni.branch,
+          degree: newAlumni.degree,
+          graduationYear: newAlumni.graduationYear,
+          collegeEmail: newAlumni.collegeEmail,
+          personalEmail: newAlumni.personalEmail,
+          phone: newAlumni.phone,
+          avatarUrl: newAlumni.avatarUrl,
+          currentCompany: newAlumni.currentCompany,
+          jobRole: newAlumni.jobRole,
+          industry: newAlumni.industry,
+          experienceYears: newAlumni.experienceYears,
+          city: newAlumni.city,
+          country: newAlumni.country,
+          higherStudies: newAlumni.higherStudies,
+          skills: newAlumni.skills,
+          bio: newAlumni.bio,
+          linkedinUrl: newAlumni.linkedinUrl,
+          githubUrl: newAlumni.githubUrl,
+          websiteUrl: newAlumni.websiteUrl,
+          isAvailableForMentorship: newAlumni.isAvailableForMentorship,
+          mentorshipAreas: newAlumni.mentorshipAreas,
+          maxMentees: newAlumni.maxMentees,
+          verificationStatus: newAlumni.verificationStatus,
+          verifiedAt: new Date(),
+          verifiedBy: newAlumni.verifiedBy,
+        })
+        .then(() => {
+          return pgDb
+            .update(schema.students)
+            .set({ isAlumniActivated: true, alumniId: newAlumniId })
+            .where(eq(schema.students.id, student.id));
+        })
+        .then(() => {
+          return pgDb
+            .update(schema.users)
+            .set({ role: 'ALUMNI', alumniId: newAlumniId })
+            .where(eq(schema.users.id, params.userId));
+        })
+        .catch((err) => console.error('[PostgreSQL] Failed to persist alumni activation:', err));
+    }
 
     // Create Notification for Admin
     this.notifications.push({
