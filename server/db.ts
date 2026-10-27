@@ -28,6 +28,7 @@ import { db as pgDb } from '../src/db/index.ts';
 import * as schema from '../src/db/schema.ts';
 import { eq } from 'drizzle-orm';
 import { seedDatabaseIfEmpty } from '../src/db/seed.ts';
+import { mongoManager } from './mongodb.ts';
 
 export interface DBUser extends User {
   passwordHash: string; // simulated hash
@@ -422,6 +423,10 @@ class RelationalDatabase {
   // ==========================================
   // USERS & AUTH
   // ==========================================
+  public getAllUsers(): DBUser[] {
+    return this.users;
+  }
+
   public getUserByEmail(email: string): DBUser | undefined {
     return this.users.find((u) => u.email.toLowerCase() === email.toLowerCase());
   }
@@ -432,6 +437,7 @@ class RelationalDatabase {
 
   public createUser(user: DBUser): DBUser {
     this.users.push(user);
+    mongoManager.syncUser(user);
     return user;
   }
 
@@ -440,6 +446,7 @@ class RelationalDatabase {
     if (user) {
       user.role = role;
       user.alumniId = alumniId;
+      mongoManager.syncUser(user);
     }
   }
 
@@ -464,6 +471,7 @@ class RelationalDatabase {
     const student = this.students.find((s) => s.id === studentId);
     if (!student) return null;
     student.graduationStatus = status;
+    mongoManager.syncStudent(student);
 
     pgDb
       .update(schema.students)
@@ -560,6 +568,8 @@ class RelationalDatabase {
     student.alumniId = newAlumniId;
     this.alumni.push(newAlumni);
     this.updateUserRole(params.userId, 'ALUMNI', newAlumniId);
+    mongoManager.syncAlumni(newAlumni);
+    mongoManager.syncStudent(student);
 
     // Asynchronously persist to PostgreSQL
     pgDb
@@ -786,6 +796,7 @@ class RelationalDatabase {
         createdAt: new Date().toISOString(),
       });
 
+      mongoManager.syncProfileChange(changeReq);
       return { success: true, isDirectUpdated: false, changeRequest: changeReq, profile };
     } else {
       // Non-sensitive updates apply directly
@@ -804,6 +815,7 @@ class RelationalDatabase {
       if (updates.mentorshipAreas) profile.mentorshipAreas = updates.mentorshipAreas;
 
       profile.updatedAt = new Date().toISOString();
+      mongoManager.syncAlumni(profile);
       return { success: true, isDirectUpdated: true, profile };
     }
   }
@@ -840,6 +852,7 @@ class RelationalDatabase {
         profile.verificationStatus = 'REJECTED';
       }
       profile.updatedAt = new Date().toISOString();
+      mongoManager.syncAlumni(profile);
 
       // Notify Alumni
       const user = this.users.find((u) => u.alumniId === profile.id);
@@ -857,6 +870,7 @@ class RelationalDatabase {
       }
     }
 
+    mongoManager.syncProfileChange(req);
     return { success: true, changeRequest: req };
   }
 
@@ -947,6 +961,7 @@ class RelationalDatabase {
     };
 
     this.connections.push(newConnection);
+    mongoManager.syncConnection(newConnection);
 
     // Notify Receiver
     this.notifications.push({
@@ -997,6 +1012,8 @@ class RelationalDatabase {
       }
     }
 
+    mongoManager.syncConnection(conn);
+
     // Notify Sender
     this.notifications.push({
       id: `notif-${Date.now()}`,
@@ -1043,6 +1060,7 @@ class RelationalDatabase {
 
     conn.privateMessages.push(newMessage);
     conn.updatedAt = new Date().toISOString();
+    mongoManager.syncConnection(conn);
 
     const otherUserId = conn.senderId === params.senderId ? conn.receiverId : conn.senderId;
     this.notifications.push({
@@ -1173,6 +1191,7 @@ class RelationalDatabase {
     };
 
     this.mentorshipRequests.unshift(newReq);
+    mongoManager.syncMentorship(newReq);
 
     // Notify Mentor User
     const mentorUser = this.users.find((u) => u.alumniId === mentor.id);
@@ -1203,6 +1222,7 @@ class RelationalDatabase {
     req.status = status;
     if (mentorNotes) req.mentorNotes = mentorNotes;
     req.updatedAt = new Date().toISOString();
+    mongoManager.syncMentorship(req);
 
     // Find mentee user to notify
     const menteeUser = this.users.find(
@@ -1255,6 +1275,7 @@ class RelationalDatabase {
       createdAt: new Date().toISOString(),
     };
     this.jobs.unshift(newJob);
+    mongoManager.syncJob(newJob);
 
     // Notify Admin
     this.notifications.push({
@@ -1276,6 +1297,7 @@ class RelationalDatabase {
     if (!job) return null;
     job.status = status;
     if (adminRemark) job.adminRemark = adminRemark;
+    mongoManager.syncJob(job);
     return job;
   }
 
@@ -1295,6 +1317,7 @@ class RelationalDatabase {
       createdAt: new Date().toISOString(),
     };
     this.events.unshift(newEvent);
+    mongoManager.syncEvent(newEvent);
     return newEvent;
   }
 
@@ -1316,6 +1339,7 @@ class RelationalDatabase {
 
     event.registeredUserIds.push(userId);
     event.registrationCount += 1;
+    mongoManager.syncEvent(event);
 
     // Notification
     this.notifications.push({
@@ -1372,6 +1396,7 @@ class RelationalDatabase {
     };
 
     this.achievements.unshift(newAch);
+    mongoManager.syncAchievement(newAch);
 
     // Notify Admin
     this.notifications.push({
@@ -1401,6 +1426,7 @@ class RelationalDatabase {
     if (status === 'APPROVED') {
       ach.verifiedAt = new Date().toISOString();
     }
+    mongoManager.syncAchievement(ach);
 
     const alumniUser = this.users.find((u) => u.alumniId === ach.alumniId);
     if (alumniUser) {

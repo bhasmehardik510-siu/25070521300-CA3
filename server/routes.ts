@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { db } from './db.ts';
+import { db, DBUser } from './db.ts';
 import { mongoManager } from './mongodb.ts';
 
 export const apiRouter = Router();
@@ -91,6 +91,46 @@ apiRouter.post('/auth/login', (req: Request, res: Response) => {
     user: safeUser,
     student: studentProfile,
     alumni: alumniProfile,
+  });
+});
+
+apiRouter.post('/auth/register', (req: Request, res: Response) => {
+  const { email, password, name, role = 'STUDENT', studentId, alumniId } = req.body;
+  if (!email || !password || !name) {
+    return res.status(400).json({ success: false, error: 'Name, email, and password are required.' });
+  }
+
+  const existing = db.getUserByEmail(email);
+  if (existing) {
+    return res.status(400).json({ success: false, error: 'A user with this email address already exists.' });
+  }
+
+  const newUser: DBUser = {
+    id: `usr-${Date.now()}`,
+    email,
+    passwordHash: password,
+    role: role as any,
+    name,
+    avatarUrl: `https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&auto=format&fit=crop&q=80`,
+    studentId,
+    alumniId,
+    createdAt: new Date().toISOString(),
+  };
+
+  db.createUser(newUser);
+
+  res.status(201).json({
+    success: true,
+    token: newUser.id,
+    user: {
+      id: newUser.id,
+      email: newUser.email,
+      role: newUser.role,
+      name: newUser.name,
+      avatarUrl: newUser.avatarUrl,
+      createdAt: newUser.createdAt,
+    },
+    message: 'User successfully registered and persisted in MongoDB!',
   });
 });
 

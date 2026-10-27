@@ -8,31 +8,31 @@
  */
 
 import mongoose from 'mongoose';
-import { mongoManager, MongoStudent, MongoAlumni, MongoUser, MongoJob, MongoEvent } from './mongodb.ts';
+import {
+  mongoManager,
+  MongoStudent,
+  MongoAlumni,
+  MongoUser,
+  MongoJob,
+  MongoEvent,
+  MongoAchievement,
+  MongoProfileChange,
+  MongoConnection,
+  MongoMentorship,
+} from './mongodb.ts';
 
 async function testMongo() {
-  console.log('====================================================');
-  console.log('   ALUMNI CONNECT PORTAL - MONGODB DIAGNOSTIC TOOL  ');
-  console.log('====================================================\n');
+  console.log('================================================================');
+  console.log('   ALUMNI CONNECT PORTAL - MONGODB COMPASS DIAGNOSTIC TOOL      ');
+  console.log('================================================================\n');
 
   const uri = process.env.MONGODB_URI || process.env.MONGO_URL;
-  if (!uri) {
-    console.log('⚠️  No MONGODB_URI found in environment variables.');
-    console.log('   To connect to a live MongoDB Atlas database, add to your .env:');
-    console.log('   MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/alumni_portal?retryWrites=true&w=majority\n');
-    console.log('   Testing Mongoose Schema and In-Memory Model definitions...');
-    
-    console.log('   ✓ Student Model registered:', Boolean(MongoStudent));
-    console.log('   ✓ Alumni Model registered:', Boolean(MongoAlumni));
-    console.log('   ✓ User Model registered:', Boolean(MongoUser));
-    console.log('   ✓ Job Model registered:', Boolean(MongoJob));
-    console.log('   ✓ Event Model registered:', Boolean(MongoEvent));
-    console.log('\n[Status] MongoDB schemas are 100% valid and ready for live connection.');
-    process.exit(0);
+  if (uri) {
+    const maskedUri = uri.replace(/:([^@]+)@/, ':****@');
+    console.log(`📡 Connecting to user configured MongoDB URI: ${maskedUri}...`);
+  } else {
+    console.log('ℹ️  No remote MONGODB_URI set in .env. Initializing port 27017 for MongoDB Compass...');
   }
-
-  const maskedUri = uri.replace(/:([^@]+)@/, ':****@');
-  console.log(`Connecting to MongoDB URI: ${maskedUri}...`);
 
   const success = await mongoManager.connect();
   if (!success) {
@@ -40,7 +40,7 @@ async function testMongo() {
     process.exit(1);
   }
 
-  console.log('✅ Connected to MongoDB successfully!\n');
+  console.log('✅ Connected to MongoDB successfully via Mongoose!\n');
 
   try {
     const studentCount = await MongoStudent.countDocuments();
@@ -48,20 +48,29 @@ async function testMongo() {
     const userCount = await MongoUser.countDocuments();
     const jobCount = await MongoJob.countDocuments();
     const eventCount = await MongoEvent.countDocuments();
+    const achCount = await MongoAchievement.countDocuments();
+    const pcCount = await MongoProfileChange.countDocuments();
+    const connCount = await MongoConnection.countDocuments();
+    const mentorCount = await MongoMentorship.countDocuments();
 
-    console.log('Collection Record Counts:');
-    console.log(` - Students Collection: ${studentCount} documents`);
-    console.log(` - Alumni Collection:   ${alumniCount} documents`);
-    console.log(` - Users Collection:    ${userCount} documents`);
-    console.log(` - Jobs Collection:     ${jobCount} documents`);
-    console.log(` - Events Collection:   ${eventCount} documents`);
+    console.log('📊 Active MongoDB Collections in "alumni_connect":');
+    console.log(` - users:                 ${userCount} documents (Auth Credentials)`);
+    console.log(` - students:              ${studentCount} documents`);
+    console.log(` - alumni:                ${alumniCount} documents`);
+    console.log(` - jobs:                  ${jobCount} documents`);
+    console.log(` - events:                ${eventCount} documents`);
+    console.log(` - achievements:          ${achCount} documents`);
+    console.log(` - profilechangerequests: ${pcCount} documents`);
+    console.log(` - connections:           ${connCount} documents`);
+    console.log(` - mentorshiprequests:    ${mentorCount} documents`);
 
-    console.log('\n====================================================');
-    console.log('   MongoDB integration test passed successfully!    ');
-    console.log('====================================================');
+    console.log('\n================================================================');
+    console.log('🎉 MongoDB test PASSED! Open MongoDB Compass and connect to:');
+    console.log('   mongodb://127.0.0.1:27017/alumni_connect');
+    console.log('================================================================');
     process.exit(0);
   } catch (err: any) {
-    console.error('Error querying MongoDB collections:', err?.message || err);
+    console.error('Error querying MongoDB collections:', err.message);
     process.exit(1);
   }
 }
