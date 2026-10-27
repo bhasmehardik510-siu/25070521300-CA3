@@ -14,9 +14,10 @@ This project reimagines institutional alumni engagement by anchoring lifelong ve
 | **[2. System Architecture](./SYSTEM_ARCHITECTURE.md)** | Multi-tiered design, client SPA, Express REST API, and RBAC authorization matrix. |
 | **[3. Database Design & Relational Schema](./DATABASE_DESIGN.md)** | Complete entity relationship diagram (ERD), tables dictionary, 3NF normalization, and foreign keys. |
 | **[4. REST API Documentation](./API_DOCUMENTATION.md)** | Specification of all REST API endpoints with request/response payloads. |
-| **[5. Live Database Setup Guide](./LIVE_DATABASE_SETUP.md)** | Setup instructions for Supabase, Neon, Cloud SQL, or Local PostgreSQL in 2 minutes. |
-| **[6. GitHub Setup & Deployment](./GITHUB_SETUP_AND_DEPLOYMENT.md)** | Instructions for pushing to GitHub, repository layout, and deploying full-stack. |
-| **[7. Viva Defense & Evaluation Guide](./VIVA_PRESENTATION_GUIDE.md)** | Walkthrough script for faculty review, viva Q&A, and technical defense. |
+| **[5. Live Database Setup Guide (PostgreSQL)](./LIVE_DATABASE_SETUP.md)** | Setup instructions for Supabase, Neon, Cloud SQL, or Local PostgreSQL in 2 minutes. |
+| **[6. MongoDB & Mongoose Setup Guide](./MONGODB_SETUP.md)** | Setup instructions for MongoDB Atlas cluster, Mongoose schemas, and dual-database operations. |
+| **[7. GitHub Setup & Deployment](./GITHUB_SETUP_AND_DEPLOYMENT.md)** | Instructions for pushing to GitHub, repository layout, and deploying full-stack. |
+| **[8. Viva Defense & Evaluation Guide](./VIVA_PRESENTATION_GUIDE.md)** | Walkthrough script for faculty review, viva Q&A, and technical defense. |
 
 ---
 

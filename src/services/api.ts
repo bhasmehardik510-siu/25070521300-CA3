@@ -407,6 +407,30 @@ class ApiClient {
       method: 'POST',
     });
   }
+
+  // Database Status Diagnostic
+  public async getDbStatus(): Promise<{
+    success: boolean;
+    timestamp: string;
+    postgresql: {
+      type: string;
+      configured: boolean;
+      connected: boolean;
+      activeDriver: string;
+    };
+    mongodb: {
+      type: string;
+      configured: boolean;
+      connected: boolean;
+      state: string;
+      uri: string;
+      error?: string;
+      odm: string;
+      supportedCollections: string[];
+    };
+  }> {
+    return this.request('/system/db-status');
+  }
 }
 
 export const api = new ApiClient();
