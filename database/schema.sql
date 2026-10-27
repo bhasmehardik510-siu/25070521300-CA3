@@ -1,6 +1,6 @@
 -- ================================================================
 -- ALUMNI CONNECT PORTAL - RELATIONAL DATABASE SCHEMA (MySQL 8.0+)
--- Academic PBL Project: Long-Term Alumni Engagement System
+-- College Flexi Project: Long-Term Alumni Engagement System
 -- Architecture: Frontend (React) -> REST API (Flask/Express) -> MySQL
 -- ================================================================
 

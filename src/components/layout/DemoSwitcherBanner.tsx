@@ -62,7 +62,7 @@ export const DemoSwitcherBanner: React.FC = () => {
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-1.5 font-semibold text-slate-300">
           <Layers className="w-4 h-4 text-sky-400" />
-          <span className="hidden sm:inline">PBL Viva Quick Switcher:</span>
+          <span className="hidden sm:inline">Role Switcher:</span>
         </div>
 
         <div className="flex items-center gap-1.5 flex-wrap">

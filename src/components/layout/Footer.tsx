@@ -75,7 +75,7 @@ export const Footer: React.FC<FooterProps> = ({ navigate }) => {
           {/* Col 3 */}
           <div>
             <h4 className="text-slate-200 font-semibold mb-3 text-xs uppercase tracking-wider">
-              PBL Architecture
+              System Architecture
             </h4>
             <ul className="space-y-2">
               <li>
@@ -84,12 +84,12 @@ export const Footer: React.FC<FooterProps> = ({ navigate }) => {
                   className="text-sky-400 hover:text-sky-300 flex items-center gap-1 font-medium"
                 >
                   <BookOpen className="w-3.5 h-3.5" />
-                  <span>Technical Viva Presentation Guide</span>
+                  <span>Technical System Architecture & Docs</span>
                 </button>
               </li>
               <li className="flex items-center gap-1.5 text-slate-400">
                 <Database className="w-3.5 h-3.5 text-slate-500" />
-                <span>MySQL 8.0 Relational Schema</span>
+                <span>PostgreSQL / MySQL Relational Schema</span>
               </li>
               <li className="flex items-center gap-1.5 text-slate-400">
                 <Code className="w-3.5 h-3.5 text-slate-500" />
@@ -121,7 +121,7 @@ export const Footer: React.FC<FooterProps> = ({ navigate }) => {
         </div>
 
         <div className="border-t border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
-          <p>© 2027 College Alumni Connect Portal. Academic Project-Based Learning (PBL).</p>
+          <p>© 2027 College Alumni Connect Portal. University Engineering Flexi Project.</p>
           <div className="flex items-center gap-4">
             <button
               onClick={() => navigate('/privacy')}
@@ -130,7 +130,7 @@ export const Footer: React.FC<FooterProps> = ({ navigate }) => {
               Privacy Policy & Contact Shield
             </button>
             <span>•</span>
-            <span>Built for Technical Evaluation & Viva Defense</span>
+            <span>University Capstone & Technical Reference</span>
           </div>
         </div>
       </div>

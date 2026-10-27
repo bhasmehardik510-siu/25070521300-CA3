@@ -178,7 +178,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ navigate }) => {
               className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-xs sm:text-sm transition-all flex items-center gap-2"
             >
               <BookOpen className="w-4 h-4 text-sky-400" />
-              <span>Technical Viva Guide</span>
+              <span>System Architecture</span>
             </motion.button>
           </motion.div>
         </div>

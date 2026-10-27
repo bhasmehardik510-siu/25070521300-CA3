@@ -46,7 +46,7 @@ export const VivaArchitectureModal: React.FC = () => {
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-white leading-tight">
-                    PBL Architecture & Technical Viva Reference
+                    System Architecture & Technical Reference
                   </h2>
                   <p className="text-xs text-slate-400">
                     Core USP: Converting one-time convocation graduation clearance into lifelong verified alumni engagement
@@ -205,7 +205,7 @@ export const VivaArchitectureModal: React.FC = () => {
               {activeTab === 'LAYERS' && (
                 <div className="space-y-4">
                   <div className="bg-slate-950 p-4 rounded-xl font-mono text-[11px] text-slate-300 border border-slate-800 leading-normal overflow-x-auto">
-                    <p className="text-sky-400 font-bold mb-2"># Multi-Tiered PBL Architecture Flow</p>
+                    <p className="text-sky-400 font-bold mb-2"># Multi-Tiered System Architecture Flow</p>
                     <p>User Interaction (Browser / Mobile)</p>
                     <p className="text-slate-500">     │</p>
                     <p className="text-indigo-400">  [React 19 Frontend SPA]</p>
@@ -395,7 +395,7 @@ export const VivaArchitectureModal: React.FC = () => {
             {/* Footer */}
             <div className="px-6 py-3 border-t border-slate-800 bg-slate-950 flex items-center justify-between">
               <span className="text-[11px] text-slate-500">
-                College PBL Project • Alumni Engagement Platform
+                College Flexi Project • Alumni Engagement Platform
               </span>
               <button
                 onClick={() => setVivaModalOpen(false)}
